@@ -13,6 +13,10 @@ const CardItem = (props) => {
                 <img
                     alt={props.title}
                     src={props.image_url}
+                    style={{
+                        float: 'center',
+                        objectFit: 'cover'
+                    }}
                 />
             }
             actions={[

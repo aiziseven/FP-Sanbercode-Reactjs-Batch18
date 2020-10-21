@@ -16,12 +16,14 @@ export const AppProvider = props => {
             review: null,
             image_url: ""
         }
-    ])
+    ]);
+    const [loading, setLoading] = useState(true);
 
     return (
         <AppContext.Provider value={{
             loginState: [login, setLogin],
-            movieState: [movie, setMovie]
+            movieState: [movie, setMovie],
+            loadingState: [loading, setLoading]
         }}>
             {props.children}
         </AppContext.Provider>

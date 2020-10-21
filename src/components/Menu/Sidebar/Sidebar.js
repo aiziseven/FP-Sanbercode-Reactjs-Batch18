@@ -47,7 +47,7 @@ class Sidebar extends React.Component {
                         </Menu.Item>
                     <SubMenu key="sub1" icon={<UserOutlined />} title="Movies">
                         <Menu.Item key="3"><Link to='/movies'>Show All Movies</Link></Menu.Item>
-                        <Menu.Item key="4"><Link to='/movies-add'>Create New Movie</Link></Menu.Item>
+                        <Menu.Item key="4"><Link to='/movies-add'>Add New Movie</Link></Menu.Item>
                         <Menu.Item key="5"><Link to='/movies-table'>Manage Movies</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub2" icon={<TeamOutlined />} title="Games">

@@ -1,99 +1,112 @@
-import { Table, Tag, Space } from 'antd';
-import React from 'react';
+import { Table, Tag, Space, Image, Button, Tooltip } from 'antd';
+import React, { useContext, useEffect } from 'react';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const columns = [
     {
-        title: 'Name',
-        dataIndex: 'name',
-        filters: [
-            {
-                text: 'Joe',
-                value: 'Joe',
-            },
-            {
-                text: 'Jim',
-                value: 'Jim',
-            },
-            {
-                text: 'Submenu',
-                value: 'Submenu',
-                children: [
-                    {
-                        text: 'Green',
-                        value: 'Green',
-                    },
-                    {
-                        text: 'Black',
-                        value: 'Black',
-                    },
-                ],
-            },
-        ],
-        // specify the condition of filtering result
-        // here is that finding the name started with `value`
-        onFilter: (value, record) => record.name.indexOf(value) === 0,
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortDirections: ['descend'],
+        title: 'Title',
+        dataIndex: 'title',
+        key: 'title'
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
-        defaultSortOrder: 'descend',
-        sorter: (a, b) => a.age - b.age,
+        title: 'Year',
+        dataIndex: 'year',
+        key: 'year'
     },
     {
-        title: 'Address',
-        dataIndex: 'address',
-        filters: [
-            {
-                text: 'London',
-                value: 'London',
-            },
-            {
-                text: 'New York',
-                value: 'New York',
-            },
-        ],
-        filterMultiple: false,
-        onFilter: (value, record) => record.address.indexOf(value) === 0,
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortDirections: ['descend', 'ascend'],
-    },
-];
-
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
+        title: 'Duration',
+        dataIndex: 'duration',
+        key: 'duration'
     },
     {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
+        title: 'Genre',
+        dataIndex: 'genre',
+        key: 'genre'
     },
     {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
+        title: 'Rating',
+        dataIndex: 'rating',
+        key: 'rating'
     },
     {
-        key: '4',
-        name: 'Jim Red',
-        age: 32,
-        address: 'London No. 2 Lake Park',
+        title: 'Image',
+        dataIndex: 'image_url',
+        key: 'image_url',
+        render: (text, row) =>
+            <Tooltip title='click to show full image'>
+                <Image
+                    width={50}
+                    height={50}
+                    src={text}
+                />
+            </Tooltip>
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        key: 'action',
+        render: (text, row) =>
+            // console.log('id ', row.id)
+            <>
+                <Button type='primary'>
+                    <Link to='/movies'> Edit</Link>
+                </Button>
+        &nbsp;
+        &nbsp;
+                <Button type='danger'>
+                    Delete
+            </Button>
+            </>
     },
 ];
 
 function MoviesTable() {
+    const { movieState, loadingState } = useContext(AppContext);
+    const [movie, setMovie] = movieState;
+    const [loading, setLoading] = loadingState;
+
+    useEffect(() => {
+        axios.get('https://backendexample.sanbersy.com/api/data-movie')
+            .then(res => {
+                setMovie(res.data);
+                setLoading(false);
+            })
+    }, []);
+
     return (
-        <Table
-            columns={columns}
-            dataSource={data}
-        />
+        <>
+            <Button type='primary'>
+                <Link to='/movies-add'>
+                    Add New Movie
+                </Link>
+            </Button>
+            <br />
+            <br />
+            <Table
+                columns={columns}
+                dataSource={movie}
+                loading={loading}
+                pagination={{ pageSize: 10 }}
+                rowKey={record => record.id}
+                expandable={{
+                    expandedRowRender: record => [
+                        <p style={{ margin: 0 }}><b>Description:</b> {record.description}</p>,
+                        <br />,
+                        <p style={{ margin: 0 }}><b>Review:</b> {record.review}</p>,
+                        <br />,
+                        <p style={{ margin: 0 }}><b>Image:</b></p>,
+                        <br />,
+                        <p style={{ margin: 0 }}>
+                            <Image
+                                src={record.image_url}
+                            />
+                        </p>,
+                    ]
+                }}
+            />
+        </>
     );
 }
 
