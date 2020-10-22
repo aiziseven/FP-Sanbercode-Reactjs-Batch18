@@ -39,6 +39,7 @@ class Movies extends Component {
                     return (
                         <Col key={index} span={4} style={{ marginBottom: '20px ' }}>
                             <CardItem
+                                id={m.id}
                                 title={m.title}
                                 description={m.description}
                                 image_url={m.image_url}

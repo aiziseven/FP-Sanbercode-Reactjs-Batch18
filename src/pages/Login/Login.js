@@ -1,70 +1,102 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Row, Col, Form, Input, Typography, Alert } from 'antd';
 import { AppContext } from '../../context/AppContext';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { Loading3QuartersOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
 const Login = () => {
-    const { loginState } = useContext(AppContext);
+    const { loginState, userState, warnState, msgState, typeAlertState, titleAlertState, submittedState } = useContext(AppContext);
 
     const isLogin = localStorage.getItem('isLogin');
 
     const [login, setLogin] = loginState;
-    const [warn, setWarn] = useState('none');
-    const [msg, setMsg] = useState('');
+    const [warn, setWarn] = warnState;
+    const [msg, setMsg] = msgState;
+    const [typeAlert, setTypeAlert] = typeAlertState
+    const [user, setUser] = userState;
+    const [titleAlert, setTitleAlert] = titleAlertState;
+    const [submitted, setSubmitted] = submittedState;
 
     const onFinish = (values) => {
-        setLogin(1);
+        setSubmitted(true);
+        console.log('submit ', submitted);
+        axios.post('https://backendexample.sanbersy.com/api/user-login', {
+            email: values.email,
+            password: values.password
+        }).then((response) => {
+            console.log(response.data.user);
+            let user = response.data.user;
+            let token = response.data.token;
+            let currentUser = { name: user.name, email: user.email, token };
+            setUser(currentUser);
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            localStorage.setItem('isLogin', 1);
+            setLogin(1);
+        }).catch((err) => {
+            setWarn('block');
+            setMsg(err);
+            setTypeAlert('error');
+            setTitleAlert('Error');
+        })
     }
 
     const onFinishFailed = (error) => {
-        console.log('failed', error);
+        console.log('submit ', submitted);
         setWarn('block');
-        setMsg('Woy Error');
+        setMsg('Please check your email or password');
+        setTypeAlert('error');
+        setTitleAlert('Error');
     }
 
+    useEffect(() => {
+        setWarn('none');
+    }, []);
+
     return (
-        isLogin == 1 ?
-            <Redirect to='/movies' />
-            :
+        isLogin == '1' ?
+            <Redirect to='/movies' /> :
             <Row style={{ marginTop: '100px' }}>
                 <Col span={8}></Col>
                 <Col span={8}>
-                    <Title level={2} style={{ textAlign: 'center' }}>Apps</Title>
+                    <Title level={2} style={{ textAlign: 'center' }}>Login</Title>
                     <Form
                         // {...layout}
-                        name='login'
+                        name='register'
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                     >
                         <Form.Item
-                            label='Username'
-                            name='username'
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            name='email'
+                            rules={[
+                                { required: true, message: 'Please input your E-mail' },
+                                { type: 'email', message: 'Invalid E-mail Format' }
+                            ]}
                         >
-                            <Input />
+                            <Input placeholder='E-mail' />
                         </Form.Item>
                         <Form.Item
-                            label='Password'
                             name='password'
-                            rules={[{ required: true, message: 'Please input your password!' }]}
+                            rules={[
+                                { required: true, message: 'Please input your Password' },
+                            ]}
                         >
-                            <Input.Password />
+                            <Input.Password placeholder='Password' />
                         </Form.Item>
                         <p style={{ textAlign: 'center' }}>Don't have an account? <Link to='/register'>Register</Link></p>
                         <Form.Item >
                             <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-                                Submit
-                        </Button>
+                                {submitted == true ? <Loading3QuartersOutlined spin /> : 'Login'}
+                            </Button>
                         </Form.Item>
                     </Form>
                     <Alert
                         style={{ display: warn }}
-                        message="Error"
+                        message={titleAlert}
                         description={msg}
-                        type="error"
+                        type={typeAlert}
                         showIcon
                     />
                 </Col>

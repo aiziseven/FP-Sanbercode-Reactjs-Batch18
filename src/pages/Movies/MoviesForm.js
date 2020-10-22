@@ -1,11 +1,14 @@
-import { Form, Input, InputNumber, Button, Select, Slider, Row, Col, Image, Typography } from 'antd';
+import { Loading3QuartersOutlined } from '@ant-design/icons';
+import { Form, Input, InputNumber, Button, Select, Slider, Row, Col, Image, Typography, Alert } from 'antd';
 import axios from 'axios';
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CardItem from '../../components/CardItem/CardItem';
+import Notification from '../../components/Notification/Notification';
 import { AppContext } from '../../context/AppContext';
 
 const { Title } = Typography;
+const { Option } = Select;
 
 const layout = {
     labelCol: { span: 2 },
@@ -17,9 +20,12 @@ const tailLayout = {
 };
 
 const MoviesForm = () => {
-    const { movieState, loadingState } = useContext(AppContext);
+    const { movieState, loadingState, userState, submittedState } = useContext(AppContext);
 
     const [movie, setMovie] = movieState;
+    const [user, setUser] = userState;
+    const [submitted, setSubmitted] = submittedState;
+    const [form] = Form.useForm();
 
     // useEffect(() => {
     //     axios.get('https://backendexample.sanbersy.com/api/data-movie')
@@ -31,16 +37,41 @@ const MoviesForm = () => {
 
     const onFinish = values => {
         console.log('Success:', values);
+        setSubmitted(true);
+        axios.post('https://backendexample.sanbersy.com/api/data-movie',
+            {
+                title: values.title,
+                description: values.description,
+                year: values.year,
+                duration: values.duration,
+                genre: values.genre,
+                rating: values.rating,
+                review: values.review,
+                image_url: values.image_url
+            },
+            { headers: { 'Authorization': `Bearer ${user.token}` } }
+        ).then((response) => {
+            form.resetFields();
+            Notification('success', 'Success!', 'Data has been added!');
+            setSubmitted(false);
+            form.resetFields();
+        }).catch((err) => {
+            console.log(err);
+            Notification('error', 'Error!', 'Failed to submit data');
+            setSubmitted(false);
+        })
     };
 
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
+        Notification('error', 'Error!', 'Failed to submit data');
     };
 
     return (
         <Row>
             <Col span={16}>
                 <Form
+                    form={form}
                     {...layout}
                     name="basic"
                     onFinish={onFinish}
@@ -52,7 +83,7 @@ const MoviesForm = () => {
                         rules={[{ required: true, message: 'Please input title!' }]}
                         hasFeedback
                     >
-                        <Input />
+                        <Input disabled={submitted == true ? true : false} />
                     </Form.Item>
 
                     <Form.Item
@@ -61,7 +92,7 @@ const MoviesForm = () => {
                         rules={[{ required: true, message: 'Please input description!' }]}
                         hasFeedback
                     >
-                        <Input.TextArea rows={4} />
+                        <Input.TextArea rows={4} disabled={submitted == true ? true : false} />
                     </Form.Item>
 
                     <Form.Item
@@ -72,21 +103,23 @@ const MoviesForm = () => {
                     >
                         <InputNumber
                             min={1980}
-                            defaultValue={2020}
                             style={{ width: '100%' }}
+                            disabled={submitted == true ? true : false}
                         />
                     </Form.Item>
 
                     <Form.Item
                         label="Duration"
                         name="duration"
-                        rules={[{ required: true, message: 'Please input duration!' }]}
+                        rules={[
+                            { required: true, message: 'Please input duration!' },
+                        ]}
                         hasFeedback
                     >
                         <InputNumber
                             min={1}
-                            defaultValue={120}
                             style={{ width: '100%' }}
+                            disabled={submitted == true ? true : false}
                         />
                     </Form.Item>
 
@@ -96,7 +129,7 @@ const MoviesForm = () => {
                         rules={[{ required: true, message: 'Please input genre!' }]}
                         hasFeedback
                     >
-                        <Select >
+                        <Select disabled={submitted == true ? true : false}>
                             <Option value='Action'>Action</Option>
                             <Option value='Horror'>Horror</Option>
                             <Option value='Comedy'>Comedy</Option>
@@ -108,11 +141,16 @@ const MoviesForm = () => {
                     <Form.Item
                         label="Rating"
                         name="rating"
+                        rules={[
+                            { required: true, message: 'Please input rating!' },
+                        ]}
+                        hasFeedback
                     >
-                        <Slider
-                            defaultValue={5}
+                        <InputNumber
                             min={1}
                             max={10}
+                            style={{ width: '100%' }}
+                            disabled={submitted == true ? true : false}
                         />
                     </Form.Item>
 
@@ -122,7 +160,7 @@ const MoviesForm = () => {
                         rules={[{ required: true, message: 'Please input review!' }]}
                         hasFeedback
                     >
-                        <Input.TextArea rows={4} />
+                        <Input.TextArea rows={4} disabled={submitted == true ? true : false} />
                     </Form.Item>
 
                     <Form.Item
@@ -131,12 +169,12 @@ const MoviesForm = () => {
                         rules={[{ required: true, message: 'Please input image url!' }]}
                         hasFeedback
                     >
-                        <Input.TextArea rows={4} />
+                        <Input.TextArea rows={4} disabled={submitted == true ? true : false} />
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            {submitted == true ? <Loading3QuartersOutlined spin /> : 'Submit'}
                         </Button>
                         &nbsp;
                         &nbsp;

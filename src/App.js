@@ -7,17 +7,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Routes from './components/Menu/Sidebar/Routes';
 
 function App() {
-  const isLogin = localStorage.getItem('isLogin');
   return (
     <AppProvider>
       <Router>
-        {/* <Login /> */}
-        {isLogin == 1 ?
-          <LayoutMenu>
-            <Routes />
-          </LayoutMenu>
-          :
-          <Routes />}
+        <Routes />
       </Router>
     </AppProvider>
   );

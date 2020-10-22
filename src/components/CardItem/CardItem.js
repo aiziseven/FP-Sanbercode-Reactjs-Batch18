@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card } from 'antd';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { Card, Tooltip } from 'antd';
+import { EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const { Meta } = Card;
 
@@ -10,19 +11,28 @@ const CardItem = (props) => {
             hoverable
             style={{ width: 240 }}
             cover={
-                <img
-                    alt={props.title}
-                    src={props.image_url}
-                    style={{
-                        float: 'center',
-                        objectFit: 'cover'
-                    }}
-                />
+                <Link to={`/movies-detail/${props.id}`}>
+                    <img
+                        alt={props.title}
+                        src={props.image_url}
+                        width='240'
+                        style={{
+                            float: 'center',
+                            objectFit: 'cover'
+                        }}
+                    />
+                </Link>
             }
             actions={[
-                <SettingOutlined key="setting" />,
-                <EditOutlined key="edit" />,
-                <EllipsisOutlined key="ellipsis" />,
+                <Tooltip title='View detail'>
+                    <Link to={`/movies-detail/${props.id}`} >
+                        <EyeOutlined key="detail">
+                        </EyeOutlined>
+                    </Link>
+                </Tooltip>,
+                <Tooltip title='Edit data'>
+                    <EditOutlined key="edit" />
+                </Tooltip>,
             ]}
         >
             <Meta
