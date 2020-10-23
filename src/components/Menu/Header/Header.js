@@ -6,10 +6,9 @@ const { Header } = Layout;
 const HeaderMenu = () => {
     return (
         <Header style={{ padding: 0 }}>
-            <Menu theme="dark" mode="horizontal">
-                <Menu.Item key="1">nav 1</Menu.Item>
-                <Menu.Item key="2">nav 2</Menu.Item>
-                <Menu.Item key="3">nav 3</Menu.Item>
+            <Menu style={{ float: 'right' }} theme="dark" mode="horizontal">
+                <Menu.Item key="1">About</Menu.Item>
+                <Menu.Item key="2">Contact</Menu.Item>
             </Menu>
         </Header>
     );

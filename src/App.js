@@ -10,7 +10,9 @@ function App() {
   return (
     <AppProvider>
       <Router>
-        <Routes />
+        <LayoutMenu>
+          <Routes />
+        </LayoutMenu>
       </Router>
     </AppProvider>
   );

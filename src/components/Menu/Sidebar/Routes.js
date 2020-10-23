@@ -12,6 +12,7 @@ import LayoutMenu from '../LayoutMenu/LayoutMenu';
 const Routes = () => {
 
     return (
+
         <Switch>
             <Route exact path='/'>
                 <Login />
@@ -22,13 +23,11 @@ const Routes = () => {
             <Route path='/register'>
                 <Register />
             </Route>
-
-            <LayoutMenu>
-                <PrivateRoute path='/movies' component={Movies} />
-                <PrivateRoute path='/movies-add' component={MoviesForm} />
-                <PrivateRoute path='/movies-table' component={MoviesTable} />
-                <PrivateRoute exact path='/movies-detail/:id' component={MoviesDetail} />
-            </LayoutMenu>
+            <Route path='/movies' component={Movies} />
+            <PrivateRoute path='/movies-add' component={MoviesForm} />
+            <PrivateRoute path='/movies-table' component={MoviesTable} />
+            <Route exact path='/movies-detail/:id' component={MoviesDetail} />
+            <PrivateRoute path='/movies-edit/:id' component={MoviesForm} />
             {/* <Route path='/movies'>
                 <Movies />
             </Route>

@@ -40,6 +40,19 @@ export const AppProvider = props => {
             image_url: ""
         }
     ]);
+    const [newMovie, setNewMovie] = useState(
+        {
+            id: 0,
+            title: "",
+            description: "",
+            year: 0,
+            duration: 0,
+            genre: "",
+            rating: 8,
+            review: null,
+            image_url: ""
+        }
+    );
 
     return (
         <AppContext.Provider value={{

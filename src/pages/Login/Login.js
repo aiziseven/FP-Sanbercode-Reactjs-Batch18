@@ -56,7 +56,7 @@ const Login = () => {
     }, []);
 
     return (
-        isLogin == '1' ?
+        login === 1 ?
             <Redirect to='/movies' /> :
             <Row style={{ marginTop: '100px' }}>
                 <Col span={8}></Col>

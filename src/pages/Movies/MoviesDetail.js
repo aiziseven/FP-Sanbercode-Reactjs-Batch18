@@ -27,6 +27,7 @@ const MoviesDetail = (props) => {
             genre={movieDetail.genre}
             rating={movieDetail.rating}
             image_url={movieDetail.image_url}
+            review={movieDetail.review}
         />
     );
 }

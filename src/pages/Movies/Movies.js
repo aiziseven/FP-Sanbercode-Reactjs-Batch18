@@ -37,7 +37,7 @@ class Movies extends Component {
             <Row>
                 {this.state.movie.map((m, index) => {
                     return (
-                        <Col key={index} span={4} style={{ marginBottom: '20px ' }}>
+                        <Col key={index} span={6} style={{ marginBottom: '20px ' }}>
                             <CardItem
                                 id={m.id}
                                 title={m.title}

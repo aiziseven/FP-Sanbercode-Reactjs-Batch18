@@ -9,8 +9,6 @@ const { Title } = Typography;
 const Register = () => {
     const { loginState, warnState, msgState, typeAlertState, titleAlertState } = useContext(AppContext);
 
-    const isLogin = localStorage.getItem('isLogin');
-
     const [login, setLogin] = loginState;
     const [warn, setWarn] = warnState;
     const [msg, setMsg] = msgState;
@@ -49,57 +47,59 @@ const Register = () => {
     }, []);
 
     return (
-        <Row style={{ marginTop: '100px' }}>
-            <Col span={8}></Col>
-            <Col span={8}>
-                <Title level={2} style={{ textAlign: 'center' }}>Register</Title>
-                <Form
-                    // {...layout}
-                    name='register'
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                >
-                    <Form.Item
-                        name='name'
-                        rules={[{ required: true, message: 'Please input your Name' }]}
+        login === 1 ?
+            <Redirect to='/movies' /> :
+            <Row style={{ marginTop: '100px' }}>
+                <Col span={8}></Col>
+                <Col span={8}>
+                    <Title level={2} style={{ textAlign: 'center' }}>Register</Title>
+                    <Form
+                        // {...layout}
+                        name='register'
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
                     >
-                        <Input placeholder='Name' />
-                    </Form.Item>
-                    <Form.Item
-                        name='email'
-                        rules={[
-                            { required: true, message: 'Please input your E-mail' },
-                            { type: 'email', message: 'Invalid E-mail Format' }
-                        ]}
-                    >
-                        <Input placeholder='E-mail' />
-                    </Form.Item>
-                    <Form.Item
-                        name='password'
-                        rules={[
-                            { required: true, message: 'Please input your Password' },
-                            { min: 6, message: 'Password min. 6 character' }
-                        ]}
-                    >
-                        <Input.Password placeholder='Password' />
-                    </Form.Item>
-                    <p style={{ textAlign: 'center' }}>Already have an account? <Link to='/'>Log In</Link></p>
-                    <Form.Item >
-                        <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-                            Submit
+                        <Form.Item
+                            name='name'
+                            rules={[{ required: true, message: 'Please input your Name' }]}
+                        >
+                            <Input placeholder='Name' />
+                        </Form.Item>
+                        <Form.Item
+                            name='email'
+                            rules={[
+                                { required: true, message: 'Please input your E-mail' },
+                                { type: 'email', message: 'Invalid E-mail Format' }
+                            ]}
+                        >
+                            <Input placeholder='E-mail' />
+                        </Form.Item>
+                        <Form.Item
+                            name='password'
+                            rules={[
+                                { required: true, message: 'Please input your Password' },
+                                { min: 6, message: 'Password min. 6 character' }
+                            ]}
+                        >
+                            <Input.Password placeholder='Password' />
+                        </Form.Item>
+                        <p style={{ textAlign: 'center' }}>Already have an account? <Link to='/'>Log In</Link></p>
+                        <Form.Item >
+                            <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+                                Submit
                         </Button>
-                    </Form.Item>
-                </Form>
-                <Alert
-                    style={{ display: warn }}
-                    message={titleAlert}
-                    description={msg}
-                    type={typeAlert}
-                    showIcon
-                />
-            </Col>
-            <Col span={8}></Col>
-        </Row>
+                        </Form.Item>
+                    </Form>
+                    <Alert
+                        style={{ display: warn }}
+                        message={titleAlert}
+                        description={msg}
+                        type={typeAlert}
+                        showIcon
+                    />
+                </Col>
+                <Col span={8}></Col>
+            </Row>
     );
 }
 
