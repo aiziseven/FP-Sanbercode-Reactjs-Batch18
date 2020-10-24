@@ -28,16 +28,15 @@ const Register = () => {
             setTitleAlert('Success');
         }).catch((err) => {
             setWarn('block');
-            setMsg(err);
+            setMsg(`Something Wrong! ${err}`);
             setTypeAlert('error');
             setTitleAlert('Error');
         })
-        setLogin(1);
     }
 
     const onFinishFailed = (error) => {
         setWarn('block');
-        setMsg('Please check your name, email, or password');
+        setMsg(`Something Wrong! ${error}`);
         setTypeAlert('error');
         setTitleAlert('Error');
     }
@@ -49,7 +48,7 @@ const Register = () => {
     return (
         login === 1 ?
             <Redirect to='/movies' /> :
-            <Row style={{ marginTop: '100px' }}>
+            <Row>
                 <Col span={8}></Col>
                 <Col span={8}>
                     <Title level={2} style={{ textAlign: 'center' }}>Register</Title>

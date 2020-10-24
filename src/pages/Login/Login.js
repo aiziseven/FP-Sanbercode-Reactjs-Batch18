@@ -34,21 +34,24 @@ const Login = () => {
             setUser(currentUser);
             localStorage.setItem('user', JSON.stringify(currentUser));
             localStorage.setItem('isLogin', 1);
+            setSubmitted(false);
             setLogin(1);
         }).catch((err) => {
             setWarn('block');
-            setMsg(err);
+            setMsg(`Something Wrong! ${err}`);
             setTypeAlert('error');
             setTitleAlert('Error');
+            setSubmitted(false);
         })
     }
 
     const onFinishFailed = (error) => {
         console.log('submit ', submitted);
         setWarn('block');
-        setMsg('Please check your email or password');
+        setMsg(`Something Wrong! ${error}`);
         setTypeAlert('error');
         setTitleAlert('Error');
+        setSubmitted(false);
     }
 
     useEffect(() => {
@@ -58,7 +61,7 @@ const Login = () => {
     return (
         login === 1 ?
             <Redirect to='/movies' /> :
-            <Row style={{ marginTop: '100px' }}>
+            <Row>
                 <Col span={8}></Col>
                 <Col span={8}>
                     <Title level={2} style={{ textAlign: 'center' }}>Login</Title>

@@ -9,7 +9,8 @@ import {
     TeamOutlined,
     UserOutlined,
     LoginOutlined,
-    LogoutOutlined
+    LogoutOutlined,
+    KeyOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../../context/AppContext';
@@ -39,13 +40,10 @@ const Sidebar = () => {
             collapsed={collapsed}
             onCollapse={onCollapse}
         >
-            <Menu theme="dark" defaultSelectedKeys={['3']} mode="inline" style={{ height: '100%', borderRight: 0 }}>
+            <Menu theme="dark" mode="inline" style={{ height: '100%', borderRight: 0 }}>
                 <div className='logo' />
-                <Menu.Item key="1" icon={<PieChartOutlined />}>
-                    Option 1
-                    </Menu.Item>
-                <Menu.Item key="2" icon={<DesktopOutlined />}>
-                    Option 2
+                <Menu.Item key="1" icon={<KeyOutlined />}>
+                    <Link to='/change-password'>Change Password</Link>
                 </Menu.Item>
                 <SubMenu key="sub1" icon={<UserOutlined />} title="Movies">
                     <Menu.Item key="3"><Link to='/movies'>Show All Movies</Link></Menu.Item>
@@ -59,7 +57,12 @@ const Sidebar = () => {
                 </SubMenu>
                 <SubMenu key="sub2" icon={<TeamOutlined />} title="Games">
                     <Menu.Item key="5"><Link to='/games'>Show All Games</Link></Menu.Item>
-                    <Menu.Item key="6"><Link to='/games/new'>Create New Game</Link></Menu.Item>
+                    {
+                        login === 1 || localStorage.getItem('isLogin') && localStorage.getItem('user') ?
+                            <Menu.Item key="6"><Link to='/games-table'>Manage Games</Link></Menu.Item>
+                            :
+                            null
+                    }
                 </SubMenu>
                 {
                     login === 1 || localStorage.getItem('isLogin') && localStorage.getItem('user') ?

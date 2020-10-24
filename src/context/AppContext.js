@@ -17,6 +17,18 @@ export const AppProvider = props => {
             image_url: ""
         }
     ]);
+    const [game, setGame] = useState([
+        {
+            id: 0,
+            genre: '',
+            image_url: '',
+            singlePlayer: 0,
+            multiplayer: 0,
+            name: '',
+            platform: '',
+            release: '',
+        }
+    ]);
     const [loading, setLoading] = useState(true);
 
     const currentUser = JSON.parse(localStorage.getItem('user'));
@@ -40,6 +52,18 @@ export const AppProvider = props => {
             image_url: ""
         }
     ]);
+    const [gameDetail, setGameDetail] = useState([
+        {
+            id: 0,
+            genre: '',
+            image_url: '',
+            singlePlayer: 0,
+            multiplayer: 0,
+            name: '',
+            platform: '',
+            release: '',
+        }
+    ]);
     const [newMovie, setNewMovie] = useState(
         {
             id: 0,
@@ -58,6 +82,7 @@ export const AppProvider = props => {
         <AppContext.Provider value={{
             loginState: [login, setLogin],
             movieState: [movie, setMovie],
+            gameState: [game, setGame],
             loadingState: [loading, setLoading],
             userState: [user, setUser],
             warnState: [warn, setWarn],
@@ -66,6 +91,7 @@ export const AppProvider = props => {
             titleAlertState: [titleAlert, setTitleAlert],
             submittedState: [submitted, SetSubmitted],
             movieDetailState: [movieDetail, setMovieDetail],
+            gameDetailState: [gameDetail, setGameDetail],
         }}>
             {props.children}
         </AppContext.Provider>

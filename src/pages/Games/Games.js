@@ -5,31 +5,30 @@ import CardItem from '../../components/CardItem/CardItem';
 
 const { Title } = Typography;
 
-class Movies extends Component {
+class Games extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            movie: [
+            game: [
                 {
                     id: 0,
-                    title: "",
-                    description: "",
-                    year: 0,
-                    duration: 0,
-                    genre: "",
-                    rating: 8,
-                    review: null,
-                    image_url: ""
+                    genre: '',
+                    image_url: '',
+                    singlePlayer: '',
+                    multiplayer: '',
+                    name: '',
+                    platform: '',
+                    release: '',
                 }
             ]
         };
     }
 
     componentDidMount() {
-        axios.get('https://backendexample.sanbersy.com/api/data-movie')
+        axios.get('https://backendexample.sanbersy.com/api/data-game')
             .then(response => {
                 this.setState({
-                    movie: response.data
+                    game: response.data
                 })
             })
     }
@@ -38,19 +37,20 @@ class Movies extends Component {
         return (
             <Row>
                 <Col span={24}>
-                    <Title level={2}>Movies List</Title>
+                    <Title level={2}>Games List</Title>
                 </Col>
                 <Col span={24}>
                     &nbsp;
                 </Col>
-                {this.state.movie.map((m, index) => {
+                {this.state.game.map((m, index) => {
                     return (
                         <Col key={index} span={6} style={{ marginBottom: '20px ' }}>
                             <CardItem
-                                dataType='movies'
+                                dataType='games'
                                 id={m.id}
-                                title={m.title}
-                                description={m.description}
+                                name={m.name}
+                                singlePlayer={m.singlePlayer}
+                                multiplayer={m.multiplayer}
                                 image_url={m.image_url}
                             />
                         </Col>
@@ -61,4 +61,4 @@ class Movies extends Component {
     }
 }
 
-export default Movies;
+export default Games;

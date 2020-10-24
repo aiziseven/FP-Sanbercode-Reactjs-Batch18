@@ -8,79 +8,84 @@ import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
-function MoviesTable() {
-    const { movieState, loadingState } = useContext(AppContext);
-    const [movie, setMovie] = movieState;
+function GamesTable() {
+    const { gameState, loadingState } = useContext(AppContext);
+    const [game, setGame] = gameState;
     const [loading, setLoading] = loadingState;
 
     const [searching, setSearching] = useState('');
 
-    const onFinish = (values) => {
-        console.log(values);
-    }
-
-    const onFinishFailed = (err) => {
-        console.log(err);
-    }
-
-    const filterData = movie => formatter => movie.map(item => ({
+    const filterData = game => formatter => game.map(item => ({
         text: formatter(item),
         value: formatter(item)
     }))
 
     const columns = [
         {
-            title: 'Title',
-            dataIndex: 'title',
-            key: 'title',
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
             width: 150,
-            filters: filterData(movie)(i => i.title),
-            sorter: (a, b) => a.title.localeCompare(b.title),
+            filters: filterData(game)(i => i.name),
+            sorter: (a, b) => a.name.localeCompare(b.name),
             onFilter: (value, record) =>
-                record.title.indexOf(value) === 0
-        },
-        {
-            title: 'Year',
-            dataIndex: 'year',
-            key: 'year',
-            width: 100,
-            filters: filterData(movie)(i => i.year),
-            sorter: (a, b) => a.year - b.year,
-            onFilter: (value, record) =>
-                record.year.toString().indexOf(value) === 0
-        },
-        {
-            title: 'Duration',
-            dataIndex: 'duration',
-            key: 'duration',
-            width: 100,
-            sorter: (a, b) => a.duration - b.duration
+                record.name.indexOf(value) === 0
         },
         {
             title: 'Genre',
             dataIndex: 'genre',
             key: 'genre',
-            width: 150,
-            filters: filterData(movie)(i => i.genre),
+            width: 100,
+            filters: filterData(game)(i => i.genre),
             sorter: (a, b) => a.genre.localeCompare(b.genre),
             onFilter: (value, record) =>
                 record.genre.indexOf(value) === 0
         },
+        // {
+        //     title: 'Single Player',
+        //     dataIndex: 'singlePlayer',
+        //     key: 'singlePlayer',
+        //     filters: filterData(game)(i => i.singlePlayer),
+        //     sorter: (a, b) => a.singlePlayer - b.singlePlayer,
+        //     onFilter: (value, record) =>
+        //         record.singlePlayer.toString().indexOf(value) === 0
+        // },
+        // {
+        //     title: 'Multiplayer',
+        //     dataIndex: 'multiplayer',
+        //     key: 'multiplayer',
+        //     filters: filterData(game)(i => i.multiplayer),
+        //     sorter: (a, b) => a.multiplayer - b.multiplayer,
+        //     onFilter: (value, record) =>
+        //         record.multiplayer.toString().indexOf(value) === 0
+        // },
         {
-            title: 'Rating',
-            dataIndex: 'rating',
-            key: 'rating',
+            title: 'Release',
+            dataIndex: 'release',
+            key: 'release',
             width: 100,
-            filters: filterData(movie)(i => i.rating),
-            sorter: (a, b) => a.rating - b.rating,
+            filters: filterData(game)(i => i.release),
+            sorter: (a, b) => a.release - b.release,
             onFilter: (value, record) =>
-                record.rating.toString().indexOf(value) === 0
+                record.release.toString().indexOf(value) === 0
+        },
+        {
+            title: 'Player',
+            dataIndex: 'player',
+            key: 'player',
+            width: 200,
+            render: (text, row) =>
+                <>
+                    {row.singlePlayer === 1 ? <Tag color='blue' value='singlePlayer'>Single Player</Tag> : ''}
+                    {row.multiplayer === 1 ? <Tag color='red' value='multiplayer'>Multiplayer</Tag> : ''}
+
+                </>
         },
         {
             title: 'Image',
             dataIndex: 'image_url',
             key: 'image_url',
-            width: 150,
+            width: 100,
             render: (text, row) =>
                 <Tooltip title='click to show full image'>
                     <Image
@@ -99,17 +104,17 @@ function MoviesTable() {
             render: (text, row) =>
                 <>
                     <Button type='primary'>
-                        <Link to={`/movies-edit/${row.id}`}> Edit</Link>
+                        <Link to={`/games-edit/${row.id}`}> Edit</Link>
                     </Button>
             &nbsp;
             &nbsp;
                     <Button type='danger'>
                         <PopOver
                             text='Delete'
-                            title={`Delete ${row.title} data?`}
+                            title={`Delete ${row.name} data?`}
                             successText='Data has been deleted!'
                             value={`${row.id}`}
-                            dataType={'movie'}
+                            dataType={'game'}
                         />
                     </Button>
                 </>
@@ -117,9 +122,9 @@ function MoviesTable() {
     ];
 
     useEffect(() => {
-        axios.get('https://backendexample.sanbersy.com/api/data-movie')
+        axios.get('https://backendexample.sanbersy.com/api/data-game')
             .then(res => {
-                setMovie(res.data);
+                setGame(res.data);
                 setLoading(false);
             })
     }, [loading]);
@@ -132,13 +137,13 @@ function MoviesTable() {
         e.preventDefault();
         setLoading(true);
         if (searching == '') {
-            axios.get('https://backendexample.sanbersy.com/api/data-movie')
+            axios.get('https://backendexample.sanbersy.com/api/data-ga')
                 .then(res => {
-                    setMovie(res.data);
+                    setGame(res.data);
                     setLoading(false);
                 })
         } else {
-            setMovie(movie.filter(m => m.title.toLowerCase().includes(searching.toLowerCase())));
+            setGame(game.filter(g => g.name.toLowerCase().includes(searching.toLowerCase())));
             setLoading(false);
         }
     }
@@ -163,24 +168,22 @@ function MoviesTable() {
             </Row>
 
             <Button type='primary'>
-                <Link to='/movies-add'>
-                    Add New Movie
+                <Link to='/games-add'>
+                    Add New Game
                 </Link>
             </Button>
             <br />
             <br />
             <Table
                 columns={columns}
-                dataSource={movie}
+                dataSource={game}
                 loading={loading}
                 pagination={{ pageSize: 10 }}
                 rowKey={record => record.id}
                 scroll={{ x: 1300, y: 350 }}
                 expandable={{
                     expandedRowRender: record => [
-                        <p style={{ margin: 0 }}><b>Description:</b> {record.description}</p>,
-                        <br />,
-                        <p style={{ margin: 0 }}><b>Review:</b> {record.review}</p>,
+                        <p style={{ margin: 0 }}><b>Platform:</b> {record.platform}</p>,
                         <br />,
                     ]
                 }}
@@ -189,4 +192,4 @@ function MoviesTable() {
     );
 }
 
-export default MoviesTable;
+export default GamesTable;
