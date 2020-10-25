@@ -3,7 +3,7 @@ import React, { useState, createContext } from 'react';
 export const AppContext = createContext();
 
 export const AppProvider = props => {
-    const [login, setLogin] = useState(0);
+    const [login, setLogin] = useState(localStorage.getItem('isLogin') && localStorage.getItem('user') ? 1 : 0);
     const [movie, setMovie] = useState([
         {
             id: 0,

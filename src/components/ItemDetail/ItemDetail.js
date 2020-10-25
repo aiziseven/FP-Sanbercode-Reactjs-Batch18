@@ -12,7 +12,7 @@ const ItemDetail = (props) => {
 
     const [login, setLogin] = loginState;
     return (
-        props.detailType === 'movies' ?
+        props.detailType === 'movie' ?
             <>
                 <Title level={2}>{props.title}</Title>
                 <Row>

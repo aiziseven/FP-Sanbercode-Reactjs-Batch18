@@ -19,7 +19,7 @@ const MoviesDetail = (props) => {
 
     return (
         <ItemDetail
-            detailType='movie'
+            detailType={'movie'}
             itemTitle='Movie Details'
             title={movieDetail.title}
             description={movieDetail.description}

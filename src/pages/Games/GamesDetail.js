@@ -19,7 +19,7 @@ const GamesDetail = (props) => {
 
     return (
         <ItemDetail
-            detailType='game'
+            detailType={'game'}
             itemTitle='Game Details'
             name={gameDetail.name}
             platform={gameDetail.platform}
